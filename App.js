@@ -5,7 +5,7 @@ import { StyleSheet, Text, View , ScrollView , Image } from 'react-native';
 export default function App() {
   return (
     <View style={styles.container}>
-      <Text>Help Me Out!! This is my first time</Text>
+      <Text>Help Me Out!!</Text>
       <StatusBar style="auto" />
     </View>
   );
