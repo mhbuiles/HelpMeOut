@@ -1,4 +1,4 @@
-import React from 'react';
+import React , { useState } from 'react';
 import { StyleSheet , View , Button } from 'react-native';
 import { createDrawerNavigator , DrawerItem , DrawerContentScrollView } from '@react-navigation/drawer';
 import { MyProfile } from './MyProfile';
@@ -17,21 +17,43 @@ import { useSelector , useDispatch } from 'react-redux';
 import { logout } from '../store/authReducer';
 import AsyncStorage from '@react-native-community/async-storage';
 import * as RootNavigation from '../components/RootNavigation';
+import axios from 'axios';
 
 function DrawerContent( { navigation , ...props} ) {
 
   const dispatch = useDispatch();
   const profilePic = useSelector( state => state.authReducer.profilepic );
   const name = useSelector( state => state.authReducer.name );
+  const lastName = useSelector( state => state.authReducer.lastName );
   const username = useSelector( state => state.authReducer.username );
   const paperTheme = useTheme();
   const isAuthenticated = useSelector( state => state.authReducer.authenticated );
+  const [ deleteU , setDeleteU ] = useState( false );
 
   async function handleLogout() {
     await AsyncStorage.removeItem( 'token' );
     dispatch( logout() );
     RootNavigation.navigate( 'HelpMeOut!' );
   };
+
+  async function deleteUser() {
+    const token = await AsyncStorage.getItem( 'token' );
+    axios({
+      method : 'DELETE',
+      baseURL : process.env.API_URL,
+      url : '/users/delete',
+      headers : {
+        Authorization : `Bearer ${token}`,
+      }
+    })
+    .then( ( { data } ) => {
+
+    })
+    .catch( function ( err ) {
+      console.log( err );
+    })
+    RootNavigation.navigate( 'HelpMeOut!' );
+  }
 
   return (
     <DrawerContentScrollView {...props}>
@@ -42,13 +64,13 @@ function DrawerContent( { navigation , ...props} ) {
               uri : profilePic,
             } }
           />
-          <Title style = { styles.title } >{name}</Title>
+          <Title style = { styles.title } >{name} {lastName}</Title>
           <Caption style = { styles.caption} >@{username}</Caption>
         </View>
         <Drawer.Section title = 'Options' >
           <TouchableRipple onPress = {props.toggleThemeH} >
             <View style = { styles.preference }>
-              <Text>Dark mode</Text>
+              <Text style = {styles.opText}>Dark mode</Text>
               <View pointerEvents = 'none' >
                 <Switch value = { paperTheme.dark } />
               </View>
@@ -56,9 +78,17 @@ function DrawerContent( { navigation , ...props} ) {
           </TouchableRipple>
           <TouchableRipple onPress = {handleLogout} >
             <View style = { styles.preference }>
-              <Text>Sign out</Text>
+              <Text style = {styles.opText}>Sign out</Text>
               <View pointerEvents = 'none' >
                 <Switch value = { !isAuthenticated } />
+              </View>
+            </View>
+          </TouchableRipple>
+          <TouchableRipple onPress = {deleteUser} >
+            <View style = { styles.preference }>
+              <Text style = {styles.opText}>Delete account</Text>
+              <View pointerEvents = 'none' >
+                <Switch value = { deleteU } />
               </View>
             </View>
           </TouchableRipple>
@@ -94,6 +124,7 @@ const styles = StyleSheet.create({
   caption: {
     fontSize: 14,
     lineHeight: 14,
+    fontWeight : 'bold',
   },
   row: {
     marginTop: 20,
@@ -117,5 +148,8 @@ const styles = StyleSheet.create({
     justifyContent: 'space-between',
     paddingVertical: 12,
     paddingHorizontal: 16,
+  },
+  opText : {
+    fontWeight : 'bold',
   },
 });

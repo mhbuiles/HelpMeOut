@@ -4,6 +4,7 @@ import { createStackNavigator } from '@react-navigation/stack';
 import { NavigationContainer } from '@react-navigation/native';
 import { Feed } from './Feed';
 import { Post } from './Post';
+import { OtherUserProfile } from './OtherUserProfile';
 
 export function Postsfeed() {
 
@@ -13,6 +14,7 @@ export function Postsfeed() {
     <Stack.Navigator>
       <Stack.Screen name = 'Feed' component = {Feed} />
       <Stack.Screen name = 'Post' component = {Post} />
+      <Stack.Screen name = 'OtherUserProfile' component = {OtherUserProfile} />
     </Stack.Navigator>
   )
 }

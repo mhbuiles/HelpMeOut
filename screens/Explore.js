@@ -1,8 +1,9 @@
 import React , { useState , useCallback } from 'react';
-import { StyleSheet , View , Text , Button , TextInput , FlatList , ScrollView , Image } from 'react-native';
+import { StyleSheet , View , Text , Button , TextInput , FlatList , ScrollView , Image , TouchableOpacity } from 'react-native';
 import axios from 'axios';
 import { useFocusEffect } from '@react-navigation/native';
-import { useTheme } from 'react-native-paper';
+import { useTheme , Searchbar } from 'react-native-paper';
+import { FlatGrid } from 'react-native-super-grid';
 
 export function Explore( { navigation } ) {
 
@@ -28,32 +29,38 @@ export function Explore( { navigation } ) {
 
   return (
     <View style = {styles.container}>
-      <TextInput
+      <Searchbar
+        type = 'clear'
         placeholder = 'Go find'
         autoCapitalize = 'none'
         onChangeText = { text => {
           setSearch(text);
         }}
+        value = {search}
         style = {paperTheme.dark ? styles.darkTextInput : styles.lightTextInput}
       />
       <Button
         title = 'Search'
-        onPress = { () => navigation.navigate( 'Search' , { username : search } )}
+        onPress = { () => {
+          navigation.navigate( 'Search' , { username : search } );
+          setSearch('');
+         }}
       />
-      <FlatList
+      <FlatGrid
         data = {posts}
         renderItem = { ( { item } ) => (
           <ScrollView>
-            <Text style = {paperTheme.dark ? styles.lightText : styles.darkText}>
-              {item.caption}
-            </Text>
-            <Image
-              style = { { height : 50 , width : 50 } }
-              source = { { uri : item.image} }
-            />
+            <TouchableOpacity onPress = { () => navigation.navigate( 'Post' , { id : item.id } ) } >
+              <Image
+                style = { { height : 130 , width : 140 } }
+                source = { { uri : item.image} }
+              />
+            </TouchableOpacity>
           </ScrollView>
         )}
+        spacing = {2}
         keyExractor = { ( item ) => `${item.id}`}
+        style = { { width : 415 } }
       />
     </View>
   )

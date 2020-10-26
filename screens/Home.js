@@ -9,10 +9,11 @@ import { Exploresearch } from './Exploresearch';
 import { Share } from './Share';
 import { Activity } from './Activity';
 import { DrawerP } from './Drawer';
+import { Messages } from './Messages';
 import AsyncStorage from '@react-native-community/async-storage';
 import { Ionicons } from "@expo/vector-icons";
 
-export function Home( {...props} ) {
+export function Home( { navigation , ...props } ) {
 
   const toggleThemeH = props.toggleTheme;
 
@@ -57,13 +58,24 @@ export function Home( {...props} ) {
         }}
       />
       <Tab.Screen
-        name = 'Drawer'
+        name = 'Messages'
+        component = {Messages}
+        options = {{
+          tabBarIcon : ( { color , size } ) => (
+            <Ionicons name = 'ios-mail' size = {size} color = {color} />
+          )
+        }}
+      />
+      <Tab.Screen
+        name = 'Profile'
         options = {{
           tabBarIcon : ( { color , size } ) => (
             <Ionicons name = 'ios-contact' size = {size} color = {color} />
-          )
+          ),
         }}
-      >{ props => <DrawerP {...props} toggleThemeH = {toggleThemeH}/>}</Tab.Screen>
+      >
+        { props => <DrawerP {...props} toggleThemeH = {toggleThemeH}/>}
+      </Tab.Screen>
     </Tab.Navigator>
   )
 }

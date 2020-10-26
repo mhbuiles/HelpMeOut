@@ -7,13 +7,14 @@ import { useSelector } from 'react-redux';
 import { useTheme } from 'react-native-paper';
 import { FlatGrid } from 'react-native-super-grid';
 
-export function MyProfile( { navigation } ) {
+export function OtherUserProfile( { navigation , route } ) {
 
-  const [ myPosts , setMyPosts ] = useState( [] );
+  const [ userPosts , setUserPosts ] = useState( [] );
   const [ loading , setLoading ] = useState( true );
-  const name = useSelector( state => state.authReducer.name );
-  const username = useSelector( state => state.authReducer.username );
-  const profilepic = useSelector( state => state.authReducer.profilepic );
+  const [ name , setName ] = useState( '' );
+  const [ lastName , setLastName ] = useState( '' );
+  const [ username , setUsername ] = useState( '' );
+  const [ profilepic , setProfilepic ] = useState( '' );
   const paperTheme = useTheme();
 
   useFocusEffect(
@@ -24,13 +25,17 @@ export function MyProfile( { navigation } ) {
         axios({
           method : 'GET',
           baseURL : process.env.API_URL,
-          url : '/posts/myposts',
+          url : `/users/${route.params.username}`,
           headers : {
             Authorization : `Bearer ${token}`,
           }
         })
         .then( ( { data } ) => {
-          setMyPosts( data );
+          setName( data.name );
+          setUsername( data.username );
+          setLastName( data.lastName );
+          setProfilepic( data.profilepic );
+          setUserPosts( data.Posts );
           setLoading( false );
         })
         .catch( function ( err ) {
@@ -50,14 +55,14 @@ export function MyProfile( { navigation } ) {
 
   return (
     <View style = {styles.container}>
-      <Text style = {paperTheme.dark ? styles.lightText : styles.darkText}>Hola, {name}.</Text>
+      <Text style = {paperTheme.dark ? styles.lightText : styles.darkText}>{name} {lastName}</Text>
       <Image
         style = { { height : 60 , width : 60 , borderRadius : 100 } }
         source = { { uri : profilepic } }
       />
       <Text style = {paperTheme.dark ? styles.lightText : styles.darkText}>@{username}</Text>
       <FlatGrid
-        data = {myPosts}
+        data = {userPosts}
         renderItem = { ( { item } ) => (
           <ScrollView>
             <TouchableOpacity onPress = { () => navigation.navigate( 'Post' , { id : item.id } ) } >

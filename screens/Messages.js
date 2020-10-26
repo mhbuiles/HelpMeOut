@@ -2,19 +2,17 @@ import React from 'react';
 import { StyleSheet , View , Text , Button } from 'react-native';
 import { createStackNavigator } from '@react-navigation/stack';
 import { NavigationContainer } from '@react-navigation/native';
-import { Explore } from './Explore';
-import { Search } from './Search';
-import { Post } from './Post';
+import { ChatsList } from './ChatsList';
+import { Chat } from './Chat';
 
-export function Exploresearch() {
+export function Messages() {
 
   const Stack = createStackNavigator();
 
   return (
     <Stack.Navigator>
-      <Stack.Screen name = 'Explore' component = {Explore} />
-      <Stack.Screen name = 'Search' component = {Search} />
-      <Stack.Screen name = 'Post' component = {Post} />
+      <Stack.Screen name = 'ChatsList' component = {ChatsList} />
+      <Stack.Screen name = 'Chat' component = {Chat} />
     </Stack.Navigator>
   )
 }

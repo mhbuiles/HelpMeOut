@@ -47,9 +47,17 @@ export default function App() {
       <PaperProvider theme = {theme} >
         <NavigationContainer theme = {theme} ref = {navigationRef} >
           <Stack.Navigator>
-            <Stack.Screen name = 'HelpMeOut!' component = {Signin} ></Stack.Screen>
+            <Stack.Screen name = 'HelpMeOut!' component = {Signin} options = { { headerShown : false } } ></Stack.Screen>
             <Stack.Screen name = 'Signup' component = {Signup} ></Stack.Screen>
-            <Stack.Screen name = 'Home'  options = {{ title : 'HelpMeOut!' , headerLeft : () => (<Button onPress = {()=>alert('Hello')} title = '' color = 'white'/>)}} >{ props => <Home {...props} toggleTheme = {toggleTheme}/>}</Stack.Screen>
+            <Stack.Screen
+              name = 'Home'
+              options = {{
+                title : 'HelpMeOut!',
+                headerLeft : () => (<Button onPress = {()=>alert('Hello')} title = '' color = 'white'/>),
+              }}
+            >
+              { props => <Home {...props} toggleTheme = {toggleTheme}/>}
+            </Stack.Screen>
           </Stack.Navigator>
         </NavigationContainer>
       </PaperProvider>
