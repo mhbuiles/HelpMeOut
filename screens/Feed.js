@@ -114,9 +114,11 @@ export function Feed( { navigation } ) {
               data = {item.Comments.slice( 0 , 4 )}
               renderItem = { ( { item } ) => (
                 <View style = {styles.comment}>
-                  <Text style = {paperTheme.dark ? styles.lightBoldCommentText : styles.darkBoldCommentText}>
-                    { getUsername( item.UserId ) }{'  '}
-                  </Text>
+                  <TouchableOpacity onPress = { () => navigation.navigate( 'OtherUserProfile' , { username : getUsername( item.UserId ) } ) }>
+                    <Text style = {paperTheme.dark ? styles.lightBoldCommentText : styles.darkBoldCommentText}>
+                      { getUsername( item.UserId ) }{'  '}
+                    </Text>
+                  </TouchableOpacity>
                   <Text style = {paperTheme.dark ? styles.lightCommentText : styles.darkCommentText}>
                     {item.text}
                   </Text>

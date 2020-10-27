@@ -91,7 +91,7 @@ export function Post( { route , navigation } ) {
       <View style = {styles.userInfo} >
         <Image
           style = { { height : 20 , width : 20 , borderRadius : 100 } }
-          source = { { uri : postUserprofilepic } }
+          source = { { uri : postUserprofilepic ? postUserprofilepic : '../assets/icon.png' } }
         />
         <TouchableOpacity onPress = { () => navigation.navigate( 'OtherUserProfile' , { username : postUsername } ) }>
           <Text style = {paperTheme.dark ? styles.lightBoldUserInfoText : styles.darkBoldUserInfoText} >  {postUsername}</Text>

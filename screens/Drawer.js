@@ -18,6 +18,7 @@ import { logout } from '../store/authReducer';
 import AsyncStorage from '@react-native-community/async-storage';
 import * as RootNavigation from '../components/RootNavigation';
 import axios from 'axios';
+import { Chat } from './Chat';
 
 function DrawerContent( { navigation , ...props} ) {
 

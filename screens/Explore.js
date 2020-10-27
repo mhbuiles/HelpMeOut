@@ -4,6 +4,8 @@ import axios from 'axios';
 import { useFocusEffect } from '@react-navigation/native';
 import { useTheme , Searchbar } from 'react-native-paper';
 import { FlatGrid } from 'react-native-super-grid';
+import { Video } from 'expo-av';
+import VideoPlayer from 'expo-video-player';
 
 export function Explore( { navigation } ) {
 
@@ -28,47 +30,66 @@ export function Explore( { navigation } ) {
   );
 
   return (
-    <View style = {styles.container}>
-      <Searchbar
-        type = 'clear'
-        placeholder = 'Go find'
-        autoCapitalize = 'none'
-        onChangeText = { text => {
-          setSearch(text);
+    <View syle = {styles.container}>
+      <View style = {styles.exploreInput}>
+        <Searchbar
+          type = 'clear'
+          placeholder = 'Go find'
+          autoCapitalize = 'none'
+          onChangeText = { text => {
+            setSearch(text);
+          }}
+          value = {search}
+          style = {paperTheme.dark ? styles.darkTextInput : styles.lightTextInput}
+        />
+        <Button
+          title = 'Search'
+          onPress = { () => {
+            navigation.navigate( 'OtherUserProfile' , { username : search } );
+            setSearch('');
+           }}
+        />
+      </View>
+      <ScrollView >
+        <FlatGrid
+          data = {posts}
+          renderItem = { ( { item } ) => (
+            <ScrollView>
+              <TouchableOpacity onPress = { () => navigation.navigate( 'Post' , { id : item.id } ) } >
+                <Image
+                  style = { { height : 130 , width : 140 } }
+                  source = { { uri : item.image} }
+                />
+              </TouchableOpacity>
+            </ScrollView>
+          )}
+          spacing = {2}
+          keyExractor = { ( item ) => `${item.id}`}
+          style = { { width : 415 , height : 310 } }
+        />
+      </ScrollView>
+      <VideoPlayer
+        videoProps={{
+          shouldPlay: true,
+          resizeMode: 'cover',
+          source: {
+            uri: 'http://commondatastorage.googleapis.com/gtv-videos-bucket/sample/BigBuckBunny.mp4',
+          },
         }}
-        value = {search}
-        style = {paperTheme.dark ? styles.darkTextInput : styles.lightTextInput}
-      />
-      <Button
-        title = 'Search'
-        onPress = { () => {
-          navigation.navigate( 'Search' , { username : search } );
-          setSearch('');
-         }}
-      />
-      <FlatGrid
-        data = {posts}
-        renderItem = { ( { item } ) => (
-          <ScrollView>
-            <TouchableOpacity onPress = { () => navigation.navigate( 'Post' , { id : item.id } ) } >
-              <Image
-                style = { { height : 130 , width : 140 } }
-                source = { { uri : item.image} }
-              />
-            </TouchableOpacity>
-          </ScrollView>
-        )}
-        spacing = {2}
-        keyExractor = { ( item ) => `${item.id}`}
-        style = { { width : 415 } }
+        inFullscreen={true}
+        rate = { 1.0 }
+        width = {414}
+        height = {350}
       />
     </View>
+
   )
 }
 
 const styles = StyleSheet.create({
   container: {
     flex: 1,
+    flexDirection : 'column',
     alignItems: 'center',
     justifyContent: 'center',
   },
@@ -83,11 +104,11 @@ const styles = StyleSheet.create({
   darkTextInput : {
     color : 'white',
     backgroundColor : '#fd5c63',
-    width : 350,
+    width : 413,
     height : 30,
   },
   lightTextInput : {
-    width : 350,
+    width : 413,
     height : 30,
     backgroundColor : '#fd5c63',
     color : 'white',

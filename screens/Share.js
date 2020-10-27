@@ -1,10 +1,10 @@
 import React , { useState } from 'react';
-import { StyleSheet , View , Text , Button , TextInput } from 'react-native';
+import { StyleSheet , View , Text , Button , TextInput , Image } from 'react-native';
 import axios from 'axios';
 import * as Permission from 'expo-permissions';
 import * as ImagePicker from 'expo-image-picker';
 import AsyncStorage from '@react-native-community/async-storage';
-import { useTheme } from 'react-native-paper';
+import { useTheme , IconButton , Colors } from 'react-native-paper';
 
 export function Share( { navigation } ) {
 
@@ -64,22 +64,38 @@ export function Share( { navigation } ) {
 
   return (
     <View style = {styles.container}>
-      <Text style = {paperTheme.dark ? styles.lightText : styles.darkText}>Share</Text>
-      <TextInput
-        placeholder = 'Add a caption'
-        onChangeText = { text => {
-          setCaption(text);
-        }}
-        style = {paperTheme.dark ? styles.darkTextInput : styles.lightTextInput}
+      <Image
+        style = { { height : 250 , width : 250 } }
+        source = {require('../assets/icon.png')}
       />
-      <Button
-        title = 'Share a pic!'
-        onPress = {pickImage}
-      />
-      <Button
-        title = 'Share!'
-        onPress = {handleShare}
-      />
+      <View style = {styles.container}>
+        <Text style = {paperTheme.dark ? styles.lightHeaderText : styles.darkHeaderText}>Share your progress with a pic and tell your story!</Text>
+        <TextInput
+          placeholder = 'Add a caption'
+          onChangeText = { text => {
+            setCaption(text);
+          }}
+          style = {paperTheme.dark ? styles.darkTextInput : styles.lightTextInput}
+        />
+      </View>
+      <View styles = {styles.pickButton}>
+        <Text style = {paperTheme.dark ? styles.lightText : styles.darkText}>Choose your pic!</Text>
+        <IconButton
+          icon = 'image'
+          size = {100}
+          onPress = {pickImage}
+          color = '#fd5c63'
+        />
+      </View>
+      <View style = {styles.shareButton}>
+        <Text style = {paperTheme.dark ? styles.lightText : styles.darkText}>Post it!</Text>
+        <IconButton
+          icon = 'plus'
+          size = {100}
+          color = '#fd5c63'
+          onPress = {handleShare}
+        />
+      </View>
     </View>
   )
 }
@@ -88,7 +104,17 @@ const styles = StyleSheet.create({
   container: {
     flex: 1,
     alignItems: 'center',
-    justifyContent: 'center',
+    justifyContent: 'space-around',
+  },
+  shareButton: {
+    flex: 1,
+    alignItems: 'center',
+    justifyContent: 'space-around',
+  },
+  pickButton: {
+    flex: 1,
+    alignItems: 'center',
+    justifyContent: 'space-around',
   },
   lightText : {
     color : 'white',
@@ -98,11 +124,24 @@ const styles = StyleSheet.create({
     color : 'black',
     fontSize : 20,
   },
+  lightHeaderText : {
+    color : 'white',
+    fontSize : 20,
+    fontWeight : 'bold',
+    margin : 10,
+  },
+  darkHeaderText : {
+    color : 'black',
+    fontSize : 20,
+    fontWeight : 'bold',
+    margin : 10,
+  },
   darkTextInput : {
     color : 'white',
     backgroundColor : '#fd5c63',
     width : 350,
     height : 30,
+    marginBottom : 20,
   },
   lightTextInput : {
     width : 350,

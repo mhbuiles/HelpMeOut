@@ -4,8 +4,11 @@ import axios from 'axios';
 import { useFocusEffect } from '@react-navigation/native';
 import AsyncStorage from '@react-native-community/async-storage';
 import { useSelector } from 'react-redux';
-import { useTheme } from 'react-native-paper';
+import { useTheme , IconButton } from 'react-native-paper';
 import { FlatGrid } from 'react-native-super-grid';
+import * as RootNavigation from '../components/RootNavigation';
+import { useDispatch } from 'react-redux';
+import { messageProfile } from '../store/messageProfileReducer';
 
 export function OtherUserProfile( { navigation , route } ) {
 
@@ -15,7 +18,9 @@ export function OtherUserProfile( { navigation , route } ) {
   const [ lastName , setLastName ] = useState( '' );
   const [ username , setUsername ] = useState( '' );
   const [ profilepic , setProfilepic ] = useState( '' );
+  const [ otherUserId , setOtherUserId ] = useState( '' );
   const paperTheme = useTheme();
+  const dispatch = useDispatch();
 
   useFocusEffect(
     useCallback( () => {
@@ -36,6 +41,7 @@ export function OtherUserProfile( { navigation , route } ) {
           setLastName( data.lastName );
           setProfilepic( data.profilepic );
           setUserPosts( data.Posts );
+          setOtherUserId( data.id );
           setLoading( false );
         })
         .catch( function ( err ) {
@@ -55,12 +61,25 @@ export function OtherUserProfile( { navigation , route } ) {
 
   return (
     <View style = {styles.container}>
-      <Text style = {paperTheme.dark ? styles.lightText : styles.darkText}>{name} {lastName}</Text>
-      <Image
-        style = { { height : 60 , width : 60 , borderRadius : 100 } }
-        source = { { uri : profilepic } }
-      />
-      <Text style = {paperTheme.dark ? styles.lightText : styles.darkText}>@{username}</Text>
+      <View style = {styles.heading}>
+        <Image
+          style = { { height : 60 , width : 60 , borderRadius : 100 } }
+          source = { { uri : profilepic } }
+        />
+        <Text style = {paperTheme.dark ? styles.lightBoldText : styles.darkBoldText}>{'  '}@{username}</Text>
+      </View>
+      <View style = {styles.sendMessage}>
+        <Text style = {paperTheme.dark ? styles.lightText : styles.darkText}>Send {name} {lastName} a message.</Text>
+        <IconButton
+          icon = 'chat'
+          color = '#fd5c63'
+          onPress = { () => {
+            RootNavigation.navigate( 'Chat' , { receiverId : otherUserId } );
+            dispatch( messageProfile( 'messagesUP' ) );
+          }}
+        >
+        </IconButton>
+      </View>
       <FlatGrid
         data = {userPosts}
         renderItem = { ( { item } ) => (
@@ -75,6 +94,7 @@ export function OtherUserProfile( { navigation , route } ) {
         )}
         spacing = {2}
         keyExractor = { ( item ) => `${item.id}`}
+        style = { { width : 415 , height : 500 } }
       />
     </View>
   )
@@ -86,6 +106,20 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     justifyContent: 'center',
   },
+  heading: {
+    flex: 1,
+    flexDirection : 'row',
+    alignItems: 'center',
+    justifyContent : 'center',
+    marginRight : 230,
+  },
+  sendMessage: {
+    flex: 1,
+    flexDirection : 'row',
+    alignItems: 'center',
+    justifyContent: 'center',
+    marginRight : 70,
+  },
   lightText : {
     color : 'white',
     fontSize : 20,
@@ -93,5 +127,17 @@ const styles = StyleSheet.create({
   darkText : {
     color : 'black',
     fontSize : 20,
+  },
+  lightBoldText : {
+    color : 'white',
+    fontSize : 20,
+    fontWeight : 'bold',
+    marginBottom : 10,
+  },
+  darkBoldText : {
+    color : 'black',
+    fontSize : 20,
+    fontWeight : 'bold',
+    marginBottom : 10,
   },
 });

@@ -49,15 +49,6 @@ export function Home( { navigation , ...props } ) {
         }}
       />
       <Tab.Screen
-        name = 'Activity'
-        component = {Activity}
-        options = {{
-          tabBarIcon : ( { color , size } ) => (
-            <Ionicons name = 'ios-heart' size = {size} color = {color} />
-          )
-        }}
-      />
-      <Tab.Screen
         name = 'Messages'
         component = {Messages}
         options = {{

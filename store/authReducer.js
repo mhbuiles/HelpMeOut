@@ -21,6 +21,7 @@ const initialState = {
   username : '',
   email : '',
   profilepic : '',
+  id : '',
 }
 
 export function authReducer( prevState = initialState , action ) {
@@ -34,6 +35,7 @@ export function authReducer( prevState = initialState , action ) {
         username : action.payload.username,
         email : action.payload.email,
         profilepic : action.payload.profilepic,
+        id : action.payload.id,
       };
     case LOGOUT:
       return {

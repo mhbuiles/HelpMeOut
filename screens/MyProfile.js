@@ -50,12 +50,17 @@ export function MyProfile( { navigation } ) {
 
   return (
     <View style = {styles.container}>
-      <Text style = {paperTheme.dark ? styles.lightText : styles.darkText}>Hola, {name}.</Text>
-      <Image
-        style = { { height : 60 , width : 60 , borderRadius : 100 } }
-        source = { { uri : profilepic } }
-      />
-      <Text style = {paperTheme.dark ? styles.lightText : styles.darkText}>@{username}</Text>
+      <View style = {styles.header}>
+        <View style = {styles.profInf}>
+          <Image
+            style = { { height : 60 , width : 60 , borderRadius : 100 } }
+            source = { { uri : profilepic } }
+          />
+          <Text style = {paperTheme.dark ? styles.lightText : styles.darkText}>{'  '}@{username}</Text>
+        </View>
+        <Text style = {paperTheme.dark ? styles.lightText : styles.darkText}>Hi, {name}!</Text>
+        <Text style = {paperTheme.dark ? styles.lightProfInfText : styles.darkProfInfText}>{myPosts.length} posts</Text>
+      </View>
       <FlatGrid
         data = {myPosts}
         renderItem = { ( { item } ) => (
@@ -70,6 +75,7 @@ export function MyProfile( { navigation } ) {
         )}
         spacing = {2}
         keyExractor = { ( item ) => `${item.id}`}
+        style = { { width : 415 , marginTop : 50 } }
       />
     </View>
   )
@@ -88,5 +94,26 @@ const styles = StyleSheet.create({
   darkText : {
     color : 'black',
     fontSize : 20,
+  },
+  lightProfInfText : {
+    color : 'white',
+    fontSize : 15,
+  },
+  darkProfInfText : {
+    color : 'black',
+    fontSize : 15,
+  },
+  header : {
+    flex : 1,
+    flexDirection : 'column',
+    alignItems : 'center',
+    width : 400,
+    marginLeft : 0,
+    marginTop : 0,
+  },
+  profInf : {
+    flex : 1,
+    flexDirection : 'row',
+    alignItems : 'center',
   },
 });
